@@ -8,7 +8,7 @@ const resetBtn = document.getElementById('resetBtn');
 
 // Constants
 const MAX_ANGLE = 30;
-const DISTANCE_DISPLAY_DURATION = 2000; // 2 seconds
+const DISTANCE_DISPLAY_DURATION = 1000; //  seconds
 const PLANK_STABILITY_FACTOR = 5000; 
 const DAMPING_FACTOR = 0.15
 
