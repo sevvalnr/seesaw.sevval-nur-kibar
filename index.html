@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Seesaw Simulation</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class= "container">    
+            <h1>Welcome to the Seesaw Simulation Project</h1>
+            <p>Explore the dynamics of balance and weight distribution!</p>
+            <div class="info-panel">
+                <div class="info-box">
+                    <h3>Left Side </h3>
+                    <div class="value" id="leftWeight">0 kg</div>
+                </div>
+                <div class="info-box">
+                    <h3>Right Side </h3>
+                    <div class="value" id="rightWeight">0 kg</div>
+                </div>
+            </div>
+            <div class="angle-indicator" id="angleDisplay">Angle: 0°</div>
+        <div class="seesaw-container" id="seesawContainer">
+            <div class="pivot"></div>
+            <div class="plank" id="plank">
+                <div class="center-mark"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="reset-btn" id="resetBtn">Reset Seesaw</button>
+        </div>
+
+        <div class="instructions">
+            Click anywhere on the  plank to drop an object (1-10 kg).<br>
+            The seesaw will tilt based on the total torque on each side.<br>
+            Your progress is automatically saved
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
