@@ -9,7 +9,6 @@ const resetBtn = document.getElementById('resetBtn');
 // Constants
 const MAX_ANGLE = 30;
 const DISTANCE_DISPLAY_DURATION = 1000; //  seconds
-const PLANK_STABILITY_FACTOR = 5000; 
 const DAMPING_FACTOR = 0.15
 
 let PLANK_LENGTH = 500;
@@ -26,17 +25,17 @@ function updatePlankDimensions() {
     PIVOT_X = PLANK_LENGTH / 2;
 }
 function updateSeesaw() {
-    updatePlankDimensions();
-    
+    updatePlankDimensions(); 
+
     let leftTorque = 0;
     let rightTorque = 0;
     let leftWeight = 0;
     let rightWeight = 0;
 
     objects.forEach(obj => {
-        const distanceFromPivot = Math.abs(obj.position - PIVOT_X);
-        const torque = obj.weight * distanceFromPivot;
-        
+        const distance = Math.abs(obj.position - PIVOT_X);
+        const torque = obj.weight * distance;
+
         if (obj.position < PIVOT_X) {
             leftTorque += torque;
             leftWeight += obj.weight;
@@ -46,21 +45,23 @@ function updateSeesaw() {
         }
     });
 
-    let targetAngle = (rightTorque - leftTorque) / 10;
-    targetAngle = Math.max(-MAX_ANGLE, Math.min(MAX_ANGLE, targetAngle));
-    
+    const torqueDiff = rightTorque - leftTorque;
+    const targetAngle = Math.max(
+        -MAX_ANGLE,
+        Math.min(MAX_ANGLE, torqueDiff / 10)
+    );
+
     currentAngle += (targetAngle - currentAngle) * DAMPING_FACTOR;
 
     plank.style.transform = `rotate(${currentAngle}deg)`;
-    
-    document.querySelectorAll('.object').forEach(objElement => {
-        objElement.style.transform = `rotate(${-currentAngle}deg)`;
-    });
 
     leftWeightDisplay.textContent = leftWeight.toFixed(1) + ' kg';
     rightWeightDisplay.textContent = rightWeight.toFixed(1) + ' kg';
     angleDisplay.textContent = `Angle: ${currentAngle.toFixed(1)}°`;
+
+    console.count('updateSeesaw2 called');
 }
+
 // saved state from localStorage
 function loadState() {
     const saved = localStorage.getItem('seesawState');
@@ -156,35 +157,6 @@ plank.addEventListener('click', function(e) {
     updateSeesaw();
     saveState();
 });
-function updateSeesaw() {
-    updatePlankDimensions(); 
-    let leftTorque = 0;
-    let rightTorque = 0;
-    let leftWeight = 0;
-    let rightWeight = 0;
-
-    objects.forEach(obj => {
-        const distance = Math.abs(obj.position - PIVOT_X);
-        const torque = obj.weight * distance;
-
-        if (obj.position < PIVOT_X) {
-            leftTorque += torque;
-            leftWeight += obj.weight;
-        } else {
-            rightTorque += torque;
-            rightWeight += obj.weight;
-        }
-    });
-
-    // Calculate angle
-    const torqueDiff = rightTorque - leftTorque;
-    currentAngle = Math.max(-MAX_ANGLE, Math.min(MAX_ANGLE, torqueDiff / 10));
-    // Update display
-    plank.style.transform = `rotate(${currentAngle}deg)`;
-    leftWeightDisplay.textContent = leftWeight.toFixed(1) + ' kg';
-    rightWeightDisplay.textContent = rightWeight.toFixed(1) + ' kg';
-    angleDisplay.textContent = `Angle: ${currentAngle.toFixed(1)}°`;
-}
 resetBtn.addEventListener('click', function() {
     if (confirm('Are you sure you want to reset the seesaw?')) {
         objects = [];
