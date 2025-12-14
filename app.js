@@ -12,6 +12,9 @@ const DISTANCE_DISPLAY_DURATION = 2000; // 2 seconds
 const PLANK_STABILITY_FACTOR = 5000; 
 const DAMPING_FACTOR = 0.15
 
+let PLANK_LENGTH = 500;
+let PIVOT_X = PLANK_LENGTH / 2;
+
 // State
 let objects = [];
 let currentAngle = 0;
@@ -182,3 +185,30 @@ function updateSeesaw() {
     rightWeightDisplay.textContent = rightWeight.toFixed(1) + ' kg';
     angleDisplay.textContent = `Angle: ${currentAngle.toFixed(1)}°`;
 }
+resetBtn.addEventListener('click', function() {
+    if (confirm('Are you sure you want to reset the seesaw?')) {
+        objects = [];
+        currentAngle = 0; 
+        renderObjects();
+        updateSeesaw();
+        saveState();
+    }
+});
+
+let resizeTimer;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() {
+        updatePlankDimensions();
+        renderObjects();
+        updateSeesaw();
+    }, 250);
+});
+function animate() {
+    updateSeesaw();
+    requestAnimationFrame(animate);
+}
+
+updatePlankDimensions();
+loadState();
+animate();
